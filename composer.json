@@ -1,0 +1,41 @@
+{
+  "name": "rocketpath/rancher-api",
+  "type": "library",
+  "description": "Interaction with Rancher API",
+  "keywords": [
+    "api",
+    "client",
+    "rancher"
+  ],
+  "homepage": "https://github.com/rocketpath/rancher-api",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Dimitris Pagkratis",
+      "email": "dimitris.pagkratis@rocket-path.com",
+      "homepage": "http://github.com/rocketpath"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"Rocketpath\\RancherApi\\": "src/"}
+  },
+  "autoload-dev": {
+    "psr-4": {"Rocketpath\\RancherApi\\Tests\\": "tests/"}
+  },
+  "require": {
+    "php": ">=5.5",
+    "guzzlehttp/guzzle": "^6.0",
+    "jms/serializer": "^1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4"
+  },
+  "config": {
+    "bin-dir": "bin"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
+}
