@@ -2,7 +2,6 @@
 
 namespace Rocketpath\RancherApi\Resource;
 
-use JMS\Serializer\Annotation\Type;
 use Rocketpath\RancherApi\Collection\ContainerCollection;
 use Rocketpath\RancherApi\Collection\HostCollection;
 use Rocketpath\RancherApi\Collection\ServiceCollection;
@@ -11,89 +10,110 @@ use Rocketpath\RancherApi\Collection\EnvironmentCollection;
 /**
  * Project represents a Rancher resource typed as "project".
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
-class Project extends AbstractResource
-{
-    /**
-     * @var string
-     *
-     * @Type("string")
-     */
-    private $description;
+class Project {
+  /**
+   * @var string
+   *
+   * @Type("string")
+   */
+  private $description;
 
-    /**
-     * @var string
-     *
-     * @Type("string")
-     */
-    private $name;
+  /**
+   * @var string
+   *
+   * @Type("string")
+   */
+  private $name;
 
-    /**
-     * Gets the containers.
-     *
-     * @return ContainerCollection
-     */
-    public function getContainers()
-    {
-        return $this->client->get($this->links['containers'], ContainerCollection::class);
-    }
+  /**
+   * @var string
+   *
+   * @Type("string")
+   */
+  private $id;
 
-    /**
-     * Gets the description.
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
-    }
+  /**
+   * @var string
+   *
+   * @Type("string")
+   */
+  private $status;
 
-    /**
-     * Gets the hosts.
-     *
-     * @return HostCollection
-     */
-    public function getHosts()
-    {
-        return $this->client->get($this->links['hosts'], HostCollection::class);
-    }
+  /**
+   * @var int
+   *
+   * @Type("int")
+   */
+  private $created;
 
-    /**
-     * Gets the name.
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
+  /**
+   * @var array
+   */
+  private $links;
 
-    /**
-     * Gets the services.
-     *
-     * @return ServiceCollection
-     */
-    public function getServices()
-    {
-        return $this->client->get($this->links['services'], ServiceCollection::class);
-    }
+  public function __construct($client = NULL, $name = '', $id = '', $description = '', $created = '', $status = '', $links = array()) {
+    $this->name = $name;
+    $this->id = $id;
+    $this->description = $description;
+    $this->created = $created;
+    $this->status = $status;
+    $this->links = (array) $links;
+    $this->client = $client;
+  }
 
-    /**
-     * Gets the environments.
-     *
-     * @return EnvironmentCollection
-     */
-    public function getEnvironments()
-    {
-        return $this->client->get($this->links['environments'], EnvironmentCollection::class);
-    }
+  /**
+   * Gets the name.
+   *
+   * @return string
+   */
+  public function getName() {
+    return $this->name;
+  }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return 'project';
-    }
+  /**
+   * Gets the description.
+   *
+   * @return string
+   */
+  public function getDescription() {
+    return $this->description;
+  }
+
+  /**
+   * Gets the containers.
+   *
+   * @return ContainerCollection
+   */
+  public function getPods($options = array()) {
+    return $this->client->get($this->links['pods'], $options);
+  }
+
+  /**
+   * Gets the hosts.
+   *
+   * @return HostCollection
+   */
+  public function getWorkloads($options = array()) {
+    return $this->client->get($this->links['workloads'], $options);
+  }
+
+  /**
+   * Gets the hosts.
+   *
+   * @return HostCollection
+   */
+  public function getServices($options = array()) {
+    return $this->client->get($this->links['services'], $options);
+  }
+
+  /**
+   * Gets the hosts.
+   *
+   * @return HostCollection
+   */
+  public function getDeployments($options = array()) {
+    return $this->client->get($this->links['deployments'], $options);
+  }
 }

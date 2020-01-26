@@ -18,12 +18,12 @@ __Note__: To use the JMS annotation, you may have to configure your `autoload`. 
 use Rocketpath\RancherApi\Client\Client;
 use Rocketpath\RancherApi\Resource\Project;
 
-$client = new Client('access_key', 'secret_key');
+$client = new Client('username', 'secret_key');
 $project = $client->get('endpoint', Project::class);
 $containers = $project->getContainers();
 ```
 
-`endpoint` and the API Keys (`access_key` and `secret_key`) can be found in Rancher settings (`[Rancher URL]/settings/api`).
+`endpoint` and the API Keys (`username` and `secret_key`) can be found in Rancher settings (`[Rancher URL]/settings/api`).
 
 __Note__: API keys are only available for ***one*** project/environment.
 

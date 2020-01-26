@@ -8,7 +8,7 @@ use Rocketpath\RancherApi\Exception\InvalidActionException;
 /**
  * Interface ResourceInterface is implemented by all Rancher API resource classes.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 interface ResourceInterface extends ClientAwareInterface
 {

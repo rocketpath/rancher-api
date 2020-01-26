@@ -9,7 +9,7 @@ use Rancher\Exception\ResourceNotFoundException;
 /**
  * ServiceCollection represents a Rancher collection typed as "service".
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 class ServiceCollection extends AbstractCollection
 {

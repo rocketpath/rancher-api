@@ -11,7 +11,7 @@ use Rocketpath\RancherApi\Exception\InvalidActionException;
 /**
  * AbstractResource is an abstract implementation of the ResourceInterface.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 abstract class AbstractResource implements ResourceInterface
 {

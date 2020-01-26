@@ -8,7 +8,7 @@ use Rocketpath\RancherApi\Exception\InvalidActionException;
 /**
  * Container represents a Rancher resource typed as "container".
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 class Container extends AbstractResource
 {

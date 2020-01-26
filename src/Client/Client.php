@@ -5,154 +5,146 @@ namespace Rocketpath\RancherApi\Client;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\ClientInterface as HttpClientInterface;
 use GuzzleHttp\Exception\ClientException;
-use JMS\Serializer\EventDispatcher\EventDispatcher;
-use JMS\Serializer\EventDispatcher\ObjectEvent;
-use JMS\Serializer\GenericSerializationVisitor;
-use JMS\Serializer\Naming\IdenticalPropertyNamingStrategy;
-use JMS\Serializer\SerializationContext;
-use JMS\Serializer\SerializerBuilder;
-use JMS\Serializer\SerializerInterface;
 use Rocketpath\RancherApi\Exception\BadResponseException;
 use Rocketpath\RancherApi\Exception\InvalidAuthenticationInformationException;
 use Rocketpath\RancherApi\Exception\ResourceNotFoundException;
+use Rocketpath\RancherApi\Resource\Rancher;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * Client for sending requests to the Rancher API.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
-class Client implements ClientInterface
-{
-    /**
-     * @var string
-     */
-    private $accessKey;
+class Client implements ClientInterface {
+  /**
+   * @var string
+   */
+  private $username;
 
-    /**
-     * @var HttpClientInterface
-     */
-    private $httpClient;
+  /**
+   * @var HttpClientInterface
+   */
+  private $httpClient;
 
-    /**
-     * @var string
-     */
-    private $secretKey;
+  /**
+   * @var string
+   */
+  private $secretKey;
 
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
+  /**
+   * @var array
+   */
+  private $links;
 
-    /**
-     * Constructor.
-     *
-     * @param string $accessKey
-     * @param string $secretKey
-     */
-    public function __construct($accessKey, $secretKey)
-    {
-        $this->httpClient = new HttpClient();
-        $this->accessKey = $accessKey;
-        $this->secretKey = $secretKey;
+  /**
+   * Constructor.
+   *
+   * @param string $username
+   * @param string $secretKey
+   */
+  public function __construct($username, $secretKey) {
+    $this->httpClient = new HttpClient();
+    $this->username = $username;
+    $this->secretKey = $secretKey;
+  }
 
-        $this->serializer = $this->createSerializer();
+  /**
+   * {@inheritdoc}
+   */
+  public function init($uri) {
+    try {
+      $response = $this->request('GET', $uri)->getBody();
+
+      $json = json_decode($response->getContents());
+      $this->links = $json->links;
+
+      return $json;
+    } catch (ClientException $exception) {
+      switch ($exception->getCode()) {
+        case 401:
+          throw new InvalidAuthenticationInformationException('Authentication information is invalid.');
+
+        case 404:
+          throw new ResourceNotFoundException(sprintf('Resource "%s" not found.', $uri), 404, $exception);
+
+        default:
+          throw new BadResponseException($exception->getMessage(), $exception->getCode(), $exception);
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function get($uri, $options = array()) {
+    try {
+      $response = $this->request('GET', $uri, $options)->getBody();
+      $json = json_decode($response->getContents());
+
+      return $json;
+    } catch (ClientException $exception) {
+      switch ($exception->getCode()) {
+        case 401:
+          throw new InvalidAuthenticationInformationException('Authentication information is invalid.');
+
+        case 404:
+          throw new ResourceNotFoundException(sprintf('Resource "%s" not found.', $uri), 404, $exception);
+
+        default:
+          throw new BadResponseException($exception->getMessage(), $exception->getCode(), $exception);
+      }
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function post($uri, $data = null, array $options = array()) {
+    if (is_array($data)) {
+      $options = array_merge($data, $options);
+      $data = new \StdClass();
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function get($uri, $class)
-    {
-        try {
-            return $this->serializer->deserialize($this->request('GET', $uri)->getBody(), $class, 'json');
-        } catch (ClientException $exception) {
-            switch ($exception->getCode()) {
-                case 401:
-                    throw new InvalidAuthenticationInformationException('Authentication information is invalid.');
+    $this->request('post', $uri, array(
+      'body' => $this->serializer->serialize($data, 'json', SerializationContext::create()->setAttribute('options', $options))
+    ));
+  }
 
-                case 404:
-                    throw new ResourceNotFoundException(sprintf('Resource "%s" not found.', $uri), 404, $exception);
+  /**
+   * @param HttpClientInterface $httpClient
+   *
+   * @return $this
+   */
+  public function setHttpClient(HttpClientInterface $httpClient) {
+    $this->httpClient = $httpClient;
 
-                default:
-                    throw new BadResponseException($exception->getMessage(), $exception->getCode(), $exception);
-            }
-        }
+    return $this;
+  }
+
+  /**
+   * @param string $method
+   * @param string $uri
+   * @param array  $options
+   *
+   * @return ResponseInterface
+   */
+  private function request($method, $uri, array $params = array()) {
+    $options['auth'] = array($this->username, $this->secretKey);
+    if (!empty($params)) {
+      $options['query'] = $params;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function post($uri, $data = null, array $options = array())
-    {
-        if (is_array($data)) {
-            $options = array_merge($data, $options);
-            $data = new \StdClass();
-        }
+    $request = $this->httpClient->request($method, $uri, $options);
+    return $request;
+  }
 
-        $this->request('post', $uri, array(
-            'body' => $this->serializer->serialize($data, 'json', SerializationContext::create()->setAttribute('options', $options))
-        ));
-    }
+  public function getLinks() {
+    return $this->links;
+  }
 
-    /**
-     * @param HttpClientInterface $httpClient
-     *
-     * @return $this
-     */
-    public function setHttpClient(HttpClientInterface $httpClient)
-    {
-        $this->httpClient = $httpClient;
-
-        return $this;
-    }
-
-    /**
-     * Creates a serializer.
-     *
-     * @return SerializerInterface
-     */
-    private function createSerializer()
-    {
-        return SerializerBuilder::create()
-            ->setPropertyNamingStrategy(new IdenticalPropertyNamingStrategy())
-            ->configureListeners(function (EventDispatcher $dispatcher) {
-                $dispatcher->addListener('serializer.post_deserialize',
-                    function (ObjectEvent $event) {
-                        $object = $event->getObject();
-                        if ($object instanceof ClientAwareInterface) {
-                            $object->setClient($this);
-                        }
-                    }
-                );
-
-                $dispatcher->addListener('serializer.post_serialize',
-                    function (ObjectEvent $event) {
-                        $options = $event->getContext()->attributes->get('options')->getOrElse(array());
-                        $visitor = $event->getVisitor();
-
-                        if ($visitor instanceof GenericSerializationVisitor) {
-                            foreach ($options as $key => $value) {
-                                $visitor->addData($key, $value);
-                            }
-                        }
-                    }
-                );
-            })
-            ->build();
-    }
-
-    /**
-     * @param string $method
-     * @param string $uri
-     * @param array  $options
-     *
-     * @return ResponseInterface
-     */
-    private function request($method, $uri, array $options = array())
-    {
-        $options['auth'] = array($this->accessKey, $this->secretKey);
-
-        return $this->httpClient->request($method, $uri, $options);
-    }
+  public function getRancher() {
+    $rancher = new Rancher($this);
+    return $rancher;
+  }
 }

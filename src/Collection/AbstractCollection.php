@@ -10,7 +10,7 @@ use Rocketpath\RancherApi\Exception\InvalidActionException;
 /**
  * AbstractCollection is an abstract implementation of the CollectionInterface.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 abstract class AbstractCollection implements CollectionInterface
 {

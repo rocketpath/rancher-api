@@ -5,7 +5,7 @@ namespace Rocketpath\RancherApi\Exception;
 /**
  * Interface RancherApiException is implemented by all Rancher API exceptions.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 interface RancherApiException
 {

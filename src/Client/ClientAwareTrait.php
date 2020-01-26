@@ -5,7 +5,7 @@ namespace Rocketpath\RancherApi\Client;
 /**
  * Trait ClientAwareTrait is used by classes that implements ClientAwareInterface.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 trait ClientAwareTrait
 {

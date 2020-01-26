@@ -5,7 +5,7 @@ namespace Rocketpath\RancherApi\Exception;
 /**
  * InvalidActionException is thrown when an action does not exist.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 class InvalidActionException extends \RuntimeException implements RancherApiException
 {

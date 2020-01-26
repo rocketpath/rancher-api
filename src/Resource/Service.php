@@ -7,7 +7,7 @@ use JMS\Serializer\Annotation\Type;
 /**
  * Service represents a Rancher resource typed as "service".
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 class Service extends AbstractResource
 {

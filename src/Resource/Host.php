@@ -8,7 +8,7 @@ use Rocketpath\RancherApi\Exception\InvalidActionException;
 /**
  * Host represents a Rancher resource typed as "host".
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 class Host extends AbstractResource
 {

@@ -9,7 +9,7 @@ use Rocketpath\RancherApi\Resource\Container;
 /**
  * ContainerCollection represents a Rancher collection typed as "container".
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 class ContainerCollection extends AbstractCollection
 {

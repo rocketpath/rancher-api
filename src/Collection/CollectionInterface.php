@@ -1,3 +1,4 @@
+
 <?php
 
 namespace Rocketpath\RancherApi\Collection;
@@ -11,7 +12,7 @@ use Rancher\Exception\ResourceNotFoundException;
 /**
  * Interface CollectionInterface is implemented by all Rancher API collection classes.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 interface CollectionInterface extends ClientAwareInterface
 {

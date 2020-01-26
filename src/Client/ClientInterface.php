@@ -5,7 +5,7 @@ namespace Rocketpath\RancherApi\Client;
 /**
  * Client interface for sending requests to the Rancher API.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 interface ClientInterface
 {
@@ -17,7 +17,7 @@ interface ClientInterface
      *
      * @return object A $class instance
      */
-    public function get($uri, $class);
+    public function get($uri);
 
     /**
      * Sends a POST request.

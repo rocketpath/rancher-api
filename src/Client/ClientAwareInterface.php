@@ -5,7 +5,7 @@ namespace Rocketpath\RancherApi\Client;
 /**
  * Interface ClientAwareInterface is implemented by classes that depends on a Client.
  *
- * @author Morgan Auchede <morgan.auchede@gmail.com>
+ * @author Dimitris Pagkratis <dimitris.pagkratis@rocket-path.com>
  */
 interface ClientAwareInterface
 {
